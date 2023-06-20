@@ -36,7 +36,7 @@ import threading
 import xml.dom.minidom
 import pcraster
 from netCDF4 import Dataset, date2num, num2date
-from pandas.core.tools.datetimes import parsing
+from pandas import to_datetime
 import numpy as np
 
 from .errors import LisfloodError, LisfloodWarning, LisfloodFileError
@@ -331,7 +331,7 @@ class LisSettings(with_metaclass(ThreadSingleton)):
             float(self.timestep_init)
         except ValueError:
             try:
-                parsing.parse_time_string(self.timestep_init, dayfirst=True)
+                to_datetime(self.timestep_init, dayfirst=True).to_pydatetime()
             except ValueError:
                 raise LisfloodError('Option timestepInit was not parsable. Must be integer or date string: {}'.format(self.timestep_init))
             else:
@@ -616,7 +616,7 @@ def calendar(date_in, calendar_type='proleptic_gregorian'):
         # try reading a date in one of available formats
         try:
             _t_units = "hours since 1970-01-01 00:00:00"  # units used for date type conversion (datetime.datetime -> calendar-specific if needed)
-            date = parsing.parse_time_string(date_in, dayfirst=True)[0]  # datetime.datetime type
+            date = to_datetime(date_in, dayfirst=True).to_pydatetime() # datetime.datetime type
             step = date2num(date, _t_units, calendar_type)  # float type
             return num2date(step, _t_units, calendar_type)  # calendar-dependent type from netCDF4.netcdftime._netcdftime module
         except:
