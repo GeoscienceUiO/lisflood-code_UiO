@@ -795,12 +795,9 @@ def checknetcdf(name, start, end):
 
 def generateName(name, time):
     """Returns a filename based on the name and time step passed in.
-    The resulting name obeys the 8.3 DOS style format. The time step
-    will be added to the end of the filename and be prepended by 0's if
-    needed.
+    The time step will be added to the end of the filename and be prepended
+    by 0's if needed.
     The time step normally ranges from [1, nrTimeSteps].
-    The length of the name should be max 8 characters to leave room for
-    the time step.
     The name passed in may contain a directory name.
     See also: generateNameS(), generateNameST()
     """
@@ -811,19 +808,10 @@ def generateName(name, time):
     if len(tail) == 0:
         msg = "No filename specified"
         raise LisfloodError(msg)
-    if len(tail) > 8:
-        msg = "Filename '" + name + "' must be shorter than 8 characters"
-        raise LisfloodError(msg)
     if time < 0:
         msg = "Timestep must be larger than 0"
         raise LisfloodError(msg)
-
-    nr = "%d" % (time)
-    space = 11 - (len(tail) + len(nr))
-    assert space >= 0
-    result = "%s%s%s" % (tail, space * "0", nr)
-    result = "%s.%s" % (result[:8], result[8:])
-    assert len(result) == 12
+    result = f"{tail}.{time:09}"
     return os.path.join(head, result)
 
 
