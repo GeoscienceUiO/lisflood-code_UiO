@@ -27,3 +27,4 @@ lisflood_model.egg-info
 .coverage
 *.tox.ini
 .vscode/
+*.swp
