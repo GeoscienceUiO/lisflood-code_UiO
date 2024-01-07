@@ -113,8 +113,6 @@ class waterbalance(object):
 
     def storage_channel(self, option):
         ChannelStoredM3 = self.var.ChanM3.copy()
-        if option['SplitRouting']:
-            ChannelStoredM3 += self.var.Chan2M3Kin
         if option['simulateLakes']:
             ChannelStoredM3 += self.var.LakeStorageM3Balance
         if option['simulateReservoirs']:
